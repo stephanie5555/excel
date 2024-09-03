@@ -1,0 +1,87 @@
+#code number 1 - try this one
+Private Sub Workbook_NewSheet(ByVal Sh As Object)
+    Dim wsNew As Worksheet
+    Dim wsPrev As Worksheet
+    Dim lastRow As Long
+    
+    ' Set the new sheet and previous sheet
+    Set wsNew = Sh
+    Set wsPrev = ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count - 1)
+    
+    ' Copy the "Product" and "Retail Price" columns from the previous sheet to the new sheet
+    wsPrev.Range("A:A").Copy Destination:=wsNew.Range("A:A")
+    wsPrev.Range("B:B").Copy Destination:=wsNew.Range("B:B")
+    
+    ' Find the last row of data in the previous sheet
+    lastRow = wsPrev.Cells(Rows.Count, "A").End(xlUp).Row
+    
+    ' Copy "Final inventory" column values from the previous sheet to "Starting Inventory" column in the new sheet
+    wsPrev.Range("F2:F" & lastRow).Copy
+    wsNew.Range("C2:C" & lastRow).PasteSpecial xlPasteValues
+    
+    ' Zero out the "End of day restock" and "Final inventory" columns in the new sheet
+    wsNew.Range("D2:E" & lastRow).ClearContents
+    wsNew.Range("F2:F" & lastRow).ClearContents
+
+    ' Optionally, clear formats if needed
+    wsNew.Columns("C:C").NumberFormat = "General"
+    wsNew.Columns("D:F").NumberFormat = "General"
+    
+    Application.CutCopyMode = False ' Clear the clipboard
+End Sub
+
+#If that code doesn't work try this:
+
+Private Sub Workbook_NewSheet(ByVal Sh As Object)
+    Dim wsNew As Worksheet
+    Dim wsPrev As Worksheet
+    Dim lastRow As Long
+    
+    ' Set the new sheet and previous sheet
+    Set wsNew = Sh
+    Set wsPrev = ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count - 1)
+    
+    ' Copy the entire table from the previous sheet to the new sheet
+    wsPrev.UsedRange.Copy Destination:=wsNew.Range("A1")
+    
+    ' Find the last row of data in the previous sheet
+    lastRow = wsPrev.Cells(Rows.Count, "A").End(xlUp).Row
+    
+    ' Copy "Final inventory" column values from the previous sheet to "Starting Inventory" column in the new sheet
+    wsNew.Range("C2:C" & lastRow).Value = wsPrev.Range("F2:F" & lastRow).Value
+    
+    ' Zero out the "End of day restock" and "Final inventory" columns in the new sheet
+    wsNew.Range("D2:E" & lastRow).ClearContents
+    wsNew.Range("F2:F" & lastRow).ClearContents
+
+    Application.CutCopyMode = False ' Clear the clipboard
+End Sub
+#Another good code
+
+Private Sub Workbook_NewSheet(ByVal Sh As Object)
+    Dim wsNew As Worksheet
+    Dim wsPrev As Worksheet
+    Dim lastRow As Long
+    
+    ' Set the new sheet and the previous sheet
+    Set wsNew = Sh
+    Set wsPrev = ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count - 1)
+    
+    ' Copy the entire table from the previous sheet to the new sheet
+    wsPrev.UsedRange.Copy Destination:=wsNew.Range("A1")
+    
+    ' Find the last row of data in the previous sheet
+    lastRow = wsPrev.Cells(wsPrev.Rows.Count, "A").End(xlUp).Row
+    
+    ' Copy "Final inventory" column values from the previous sheet to "Starting Inventory" column in the new sheet
+    wsNew.Range("C2:C" & lastRow).Value = wsPrev.Range("F2:F" & lastRow).Value
+    
+    ' Clear contents of "End of day restock" and "Final inventory" columns in the new sheet
+    wsNew.Range("D2:D" & lastRow).ClearContents
+    wsNew.Range("F2:F" & lastRow).ClearContents
+
+    Application.CutCopyMode = False ' Clear the clipboard to prevent the marquee around copied cells
+End Sub
+
+#This one is also "refined" 
+
